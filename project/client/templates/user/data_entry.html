@@ -1,0 +1,49 @@
+{% extends "_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="content-header">
+  <div>
+    <h1>Stratigraphic data entry form</h1>
+    <hr>
+    <p>
+      <h3>Welcome, <em>{{ current_user.username }}</em></h3>
+    </p>
+  </div>
+</div>  
+
+<form class="form" role="form" method="post" action="{{ url_for('user.new_entry') }}">
+  {{ entry_form.csrf_token }}
+  {{ entry_form.hidden_tag() }}
+  {{ wtf.form_errors(entry_form, hiddens="only") }}
+
+  <div class="form">
+    {{ wtf.form_field(entry_form.unit_name )}}
+    {{ wtf.form_field(entry_form.ASUD_No) }}
+    {{ wtf.form_field(entry_form.ASUD_definition_card) }}
+    {{ wtf.form_field(entry_form.strat_no) }}
+    {{ wtf.form_field(entry_form.map_symbol )}}
+    {{ wtf.form_field(entry_form.province) }}
+    {{ wtf.form_field(entry_form.domain) }}
+    {{ wtf.form_field(entry_form.unit_description) }}
+    {{ wtf.form_field(entry_form.unit_summary )}}
+    {{ wtf.form_field(entry_form.type_locality) }}
+    {{ wtf.form_field(entry_form.unit_definition) }}
+    {{ wtf.form_field(entry_form.unit_correlation) }}
+    {{ wtf.form_field(entry_form.unit_distribution )}}
+    {{ wtf.form_field(entry_form.unit_thickness) }}
+    {{ wtf.form_field(entry_form.unit_lithology) }}
+    {{ wtf.form_field(entry_form.unit_deposition_env) }}
+    {{ wtf.form_field(entry_form.unit_contact_relations )}}
+    {{ wtf.form_field(entry_form.unit_geochronology) }}
+    {{ wtf.form_field(entry_form.unit_geochemistry) }}
+    {{ wtf.form_field(entry_form.unit_geophysical_expression) }}
+    {{ wtf.form_field(entry_form.references )}}
+  </div>
+  <div class="form">
+    <button class="btn btn-success" type="submit">Add new record</button>
+    <br><br>
+  </div>
+</form>
+
+{% endblock %}

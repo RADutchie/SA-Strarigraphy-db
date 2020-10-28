@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="content-header">
+  <div>
+    <h1>SA Stratigraphic units compiled</h1>
+    <hr>
+  </div>
+</div>
+
+<div class="main">
+  <h4>Total number of records: {{ entry_count}} </h4> 
+</div>
+<div class="table">
+  {{ table }}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="content-header">
+  <div class="row">
+    <div class="col-9">
+      <h1>Stratigraphic unit record</h1>
+    </div>
+    <div class="col-3">
+      <div class="form">
+        <a href="{{ url_for('user.index') }}" class="btn btn-success" >Close record</a>
+      </div>
+    </div>
+  </div>
+</div>  
+
+<hr>
+
+<div class="body">
+  <div>
+    {% for key, value in record.items() %}
+    <h4>{{key}}</h4>
+    <div class="container pt-2 border">
+      <p>{{value}}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

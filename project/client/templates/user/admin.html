@@ -1,0 +1,60 @@
+{% extends '_base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+  <header class="content-header">
+    <h1>Administer users</h1>
+    <hr><br>
+  </header>
+
+  <br>
+
+  <div class="table-striped">
+    <table class="table">
+      <tr>
+        <th>Id</th>
+        <th>User name</th>
+        <th>Email</th>
+      </tr>
+      {% for row in user_list %}
+      <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.username }}</td>
+        <td>{{ row.email }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <form class="form" role="form" method="post" action="{{ url_for('user.register') }}">
+    {{ register_form.csrf_token }}
+    {{ register_form.hidden_tag() }}
+    {{ wtf.form_errors(register_form, hiddens="only") }}
+
+    <div class="form-row">
+      {{ wtf.form_field(register_form.username )}}
+      {{ wtf.form_field(register_form.email) }}
+      {{ wtf.form_field(register_form.password) }}
+      {{ wtf.form_field(register_form.confirm) }}
+    </div>
+    <div class="form">
+      <button class="btn btn-success" type="submit">Add new user</button>
+      <br><br>
+    </div>
+  </form>
+
+  <form class="form" role="form" method="post" action="{{ url_for('user.remove') }}">
+    {{ remove_form.csrf_token }}
+    {{ remove_form.hidden_tag() }}
+    {{ wtf.form_errors(remove_form, hiddens="only") }}
+
+    <div class="form-row">
+      {{ wtf.form_field(remove_form.username )}}
+      
+    </div>
+    <div class="form">
+      <button class="btn btn-success" type="submit">Remove user</button>
+      <br><br>
+    </div>
+  </form>
+{% endblock %}
