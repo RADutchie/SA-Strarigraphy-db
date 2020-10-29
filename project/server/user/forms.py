@@ -2,7 +2,7 @@
 
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, IntegerField, TextAreaField, BooleanField, SelectField
+from wtforms import StringField, PasswordField, IntegerField, TextAreaField, BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, InputRequired, Optional
 
 
@@ -75,3 +75,12 @@ class SearchForm(FlaskForm):
     search = StringField('')
 
 
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', [DataRequired(), Email()])
+    
+
+
+class ResetPasswordForm(FlaskForm):
+    password = StringField('Password', [DataRequired()])
+    password2 = StringField('Repeat Password', [DataRequired(), EqualTo('password')])
+    

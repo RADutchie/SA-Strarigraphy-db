@@ -6,8 +6,8 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from project.server import bcrypt, db
 from project.server.models import User, Stratigraphy
-from project.server.utils import row2dict
-from project.server.user.forms import LoginForm, RegisterForm, RemoveUser, StratForm
+from project.server.utils import row2dict, send_password_reset_email
+from project.server.user.forms import LoginForm, RegisterForm, RemoveUser, StratForm, ResetPasswordRequestForm, ResetPasswordForm
 from project.server.user.tables import IndexTable
 
 
@@ -69,6 +69,35 @@ def login():
             return render_template("user/login.html", form=form)
     return render_template("user/login.html", title="Please Login", form=form)
 
+
+@user_blueprint.route("/reset_password_request", methods=["GET", "POST"])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('user.index'))
+    form = ResetPasswordRequestForm(request.form)
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash("Check your email for instructions to reset your password", "success")
+        return(redirect(url_for('user.login')))
+    return render_template('user/reset_password_request.html', form=form)
+
+
+@user_blueprint.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('user.index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('main.home'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.', 'success')
+        return redirect(url_for('user.login'))
+    return render_template('reset_password.html', form=form)
 
 @user_blueprint.route("/logout")
 @login_required
