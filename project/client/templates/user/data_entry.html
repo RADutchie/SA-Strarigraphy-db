@@ -12,6 +12,7 @@
   </div>
 </div>  
 
+
 <form class="form" role="form" method="post" action="{{ url_for('user.new_entry') }}">
   {{ entry_form.csrf_token }}
   {{ entry_form.hidden_tag() }}

@@ -43,6 +43,10 @@ class RemoveUser(FlaskForm):
     username = StringField("User Name", [DataRequired()])
 
 
+class RemoveRecord(FlaskForm):
+    strat_no = IntegerField("SA Strat No", [DataRequired()])
+
+
 class StratForm(FlaskForm):
     unit_name = StringField("Unit Name", [InputRequired()])
     ASUD_No = IntegerField("ASUD No", [Optional()])
@@ -81,6 +85,6 @@ class ResetPasswordRequestForm(FlaskForm):
 
 
 class ResetPasswordForm(FlaskForm):
-    password = StringField('Password', [DataRequired()])
-    password2 = StringField('Repeat Password', [DataRequired(), EqualTo('password')])
+    password = PasswordField('Password', [DataRequired()])
+    password2 = PasswordField('Repeat Password', [DataRequired(), EqualTo('password')])
     

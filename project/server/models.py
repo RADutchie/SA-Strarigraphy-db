@@ -36,6 +36,11 @@ class User(UserMixin, PkModel):
     def is_admin(self):
         return self.admin
 
+    def set_password(self, password):
+        self.password = bcrypt.generate_password_hash(
+            password, current_app.config.get("BCRYPT_LOG_ROUNDS")
+        ).decode("utf-8")
+
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},

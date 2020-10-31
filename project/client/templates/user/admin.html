@@ -26,6 +26,10 @@
     </table>
   </div>
 
+  <div class="title">
+    <h3>Add user</h3>
+  </div>
+
   <form class="form" role="form" method="post" action="{{ url_for('user.register') }}">
     {{ register_form.csrf_token }}
     {{ register_form.hidden_tag() }}
@@ -43,6 +47,10 @@
     </div>
   </form>
 
+  <div class="title">
+    <h3>Remove user</h3>
+  </div>
+
   <form class="form" role="form" method="post" action="{{ url_for('user.remove') }}">
     {{ remove_form.csrf_token }}
     {{ remove_form.hidden_tag() }}
@@ -54,6 +62,25 @@
     </div>
     <div class="form">
       <button class="btn btn-success" type="submit">Remove user</button>
+      <br><br>
+    </div>
+  </form>
+
+  <div class="title">
+    <h3>Delete record</h3>
+  </div>
+
+  <form class="form" role="form" method="post" action="{{ url_for('user.delete_record') }}">
+    {{ remove_record.csrf_token }}
+    {{ remove_record.hidden_tag() }}
+    {{ wtf.form_errors(remove_record, hiddens="only") }}
+
+    <div class="form-row">
+      {{ wtf.form_field(remove_record.strat_no )}}
+      
+    </div>
+    <div class="form">
+      <button class="btn btn-warning" type="submit">Remove strat record</button>
       <br><br>
     </div>
   </form>

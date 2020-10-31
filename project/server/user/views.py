@@ -7,7 +7,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from project.server import bcrypt, db
 from project.server.models import User, Stratigraphy
 from project.server.utils import row2dict, send_password_reset_email
-from project.server.user.forms import LoginForm, RegisterForm, RemoveUser, StratForm, ResetPasswordRequestForm, ResetPasswordForm
+from project.server.user.forms import LoginForm, RegisterForm, RemoveUser, StratForm, ResetPasswordRequestForm, ResetPasswordForm, RemoveRecord
 from project.server.user.tables import IndexTable
 
 
@@ -20,7 +20,7 @@ def admin():
     user_list = db.session.query(User.id, User.username, User.email).order_by(User.id)
     #register_form = RegisterForm(request.form)
     #remove_form = RemoveUser(request.form)
-    return render_template("user/admin.html", user_list = user_list, register_form=RegisterForm(), remove_form=RemoveUser())
+    return render_template("user/admin.html", user_list = user_list, register_form=RegisterForm(), remove_form=RemoveUser(), remove_record=RemoveRecord())
 
 @user_blueprint.route("/admin/register", methods=["POST"])
 @login_required
@@ -36,7 +36,7 @@ def register():
         )
         flash("Successfully registered new user.", "success")
         return redirect(url_for("user.admin"))
-    return render_template("user/admin.html", user_list = user_list, register_form=register_form, remove_form=RemoveUser())
+    return render_template("user/admin.html", user_list = user_list, register_form=register_form, remove_form=RemoveUser(), remove_record=RemoveRecord())
 
 @user_blueprint.route("/admin/remove", methods=["POST"])
 @login_required
@@ -46,12 +46,33 @@ def remove():
     remove_form = RemoveUser(request.form)
     if remove_form.validate_on_submit():
         user = User.query.filter_by(username=remove_form.username.data).first()
-        user.delete()
-        flash(f"successfully removed {user}.", "success")
-        return redirect(url_for("user.admin"))
+        if user:
+            user.delete()
+            flash(f"successfully removed {user}.", "success")
+            return redirect(url_for("user.admin"))
+        else:
+            flash(f"{remove_form.username.data} not in database", "warning" )
+            return redirect(url_for("user.admin"))
 
-    return render_template("user/admin.html", user_list = user_list, register_form=RegisterForm(), remove_form=remove_form)
+    return render_template("user/admin.html", user_list = user_list, register_form=RegisterForm(), remove_form=remove_form, remove_record=RemoveRecord())
 
+@user_blueprint.route("/admin/delete", methods=["POST"])
+@login_required
+def delete_record():
+    user_list = db.session.query(User.id, User.username, User.email).order_by(User.id)
+    #register_form = RegisterForm(request.form)
+    remove_record = RemoveRecord(request.form)
+    if remove_record.validate_on_submit():
+        strat_no = Stratigraphy.query.filter_by(strat_no=remove_record.strat_no.data).first()
+        if strat_no:
+            strat_no.delete()
+            flash(f"successfully removed unit {strat_no}.", "success")
+            return redirect(url_for("user.admin"))
+        else:
+            flash(f"No entry with unit no {remove_record.strat_no.data}", "warning")
+            return redirect(url_for("user.admin"))
+    
+    return render_template("user/admin.html", user_list = user_list, register_form=RegisterForm(), remove_form=RemoveUser(), remove_record=remove_record)
 
 @user_blueprint.route("/login", methods=["GET", "POST"])
 def login():
@@ -97,7 +118,7 @@ def reset_password(token):
         db.session.commit()
         flash('Your password has been reset.', 'success')
         return redirect(url_for('user.login'))
-    return render_template('reset_password.html', form=form)
+    return render_template('user/reset_password.html', form=form)
 
 @user_blueprint.route("/logout")
 @login_required
@@ -175,7 +196,7 @@ def edit(id):
     if record:
         if request.method == "POST" and form.validate_on_submit():
             form.populate_obj(record)
-            Stratigraphy.update(record)
+            Stratigraphy.update(record, edited_id=current_user.get_id())
             flash("Record updated", "success")
             return redirect(url_for('user.index'))
         return render_template('user/edit_record.html', entry_form=form)

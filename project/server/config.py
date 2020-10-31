@@ -19,6 +19,7 @@ class BaseConfig(object):
     MAIL_USE_TLS = os.getenv("MAIL_USE_TLS")
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 
 
 class DevelopmentConfig(BaseConfig):
