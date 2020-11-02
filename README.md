@@ -15,7 +15,7 @@ Designed to run with Docker.
 
 > Built with Docker v19.03.5.
 
-## Getting Started
+## Getting Started for local dev
 
 Update the environment variables in *docker-compose.yml*, and then build the images and spin up the containers:
 
@@ -61,3 +61,27 @@ Lint:
 ```sh
 $ docker-compose run web flake8 project
 ```
+
+## For Deployment
+
+Set environment variables to production, including database and email variables, including .env file.
+Use Dockerfile-for-deploy to build a single container for the web app.
+entrypoint_prod.sh will run gunicorn wsgi server in front of flask on port 8000
+
+```sh
+$ docker build -t web/app .
+$ docker run -d -p 8000:8000 --env-file ./.env web
+```
+Then ensure connection to database and run 
+
+```sh
+$ docker run web python manage.py create-db
+$ docker run web python manage.py create-admin
+```
+Or if on remote server, ssh in and run the below to get a shell in the container 
+```sh
+$ docker ps
+$ docker exec -it <container name> sh
+```
+
+Then create the database and admin as above

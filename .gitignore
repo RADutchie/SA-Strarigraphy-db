@@ -50,7 +50,7 @@ env/
 
 # Configuration
 .env
-docker-compose.yml
+.ebextensions/
 
 # Development database
 *.db
@@ -61,3 +61,6 @@ docker-compose.yml
 # Flask stuff:
 instance/
 .webassets-cache
+
+# Zip
+*.Zip

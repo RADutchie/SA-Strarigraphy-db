@@ -6,21 +6,22 @@ services:
     image: web
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: ./Dev_Docker/Dockerfile
     volumes:
       - '.:/usr/src/app'
     ports:
       - 5002:5000
     environment:
       - APP_NAME=SA Strat db
-      - FLASK_DEBUG=1
+      - FLASK_DEBUG=0
       - PYTHONUNBUFFERED=0
-      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - APP_SETTINGS=project.server.config.ProductionConfig
       - DATABASE_URL=postgres://postgres:postgres@web-db:5432/users_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@web-db:5432/users_test
-      - SECRET_KEY=change_me_in_prod
+      - SECRET_KEY=change_in_production
+      
     depends_on:
-      - web-db
+     - web-db
 
   web-db:
     container_name: web-db
