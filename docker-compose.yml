@@ -13,9 +13,9 @@ services:
       - 5002:5000
     environment:
       - APP_NAME=SA Strat db
-      - FLASK_DEBUG=0
+      - FLASK_DEBUG=1
       - PYTHONUNBUFFERED=0
-      - APP_SETTINGS=project.server.config.ProductionConfig
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@web-db:5432/users_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@web-db:5432/users_test
       - SECRET_KEY=change_in_production
