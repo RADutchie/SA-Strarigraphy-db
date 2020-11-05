@@ -18,12 +18,12 @@ class TestUserBlueprint(BaseTestCase):
         with self.client:
             response = self.client.post(
                 "/login",
-                data=dict(email="ad@min.com", password="admin_user"),
+                data=dict(username="admin", email="ad@min.com", password="admin_user"),
                 follow_redirects=True,
             )
-            self.assertIn(b"Welcome", response.data)
+            self.assertIn(b"SA Stratigraphic", response.data)
             self.assertIn(b"Logout", response.data)
-            self.assertIn(b"Members", response.data)
+            self.assertIn(b"Stratigraphic", response.data)
             self.assertTrue(current_user.email == "ad@min.com")
             self.assertTrue(current_user.is_active())
             self.assertEqual(response.status_code, 200)
@@ -65,7 +65,7 @@ class TestUserBlueprint(BaseTestCase):
         with self.client:
             self.client.post(
                 "/login",
-                data=dict(email="ad@min.com", password="admin_user"),
+                data=dict(username="admin", email="ad@min.com", password="admin_user"),
                 follow_redirects=True,
             )
             self.assertTrue(current_user.id == 1)
@@ -105,7 +105,7 @@ class TestUserBlueprint(BaseTestCase):
         self.assertIn(b"<h1>Register</h1>\n", response.data)
 
     def test_user_registration(self):
-        # Ensure registration behaves correctlys.
+        # Ensure registration behaves correctly.
         with self.client:
             response = self.client.post(
                 "/register",
@@ -116,7 +116,7 @@ class TestUserBlueprint(BaseTestCase):
                 ),
                 follow_redirects=True,
             )
-            self.assertIn(b"Welcome", response.data)
+            self.assertIn(b"SA Stratigraphic", response.data)
             self.assertTrue(current_user.email == "test@tester.com")
             self.assertTrue(current_user.is_active())
             self.assertEqual(response.status_code, 200)
