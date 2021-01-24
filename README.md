@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-A simple flask based CRUD web application to add, view and edit SA Stratigraphy digital notes into a Postres db
+A simple flask based CRUD web application to add, view and edit SA Stratigraphy digital notes into a Postgres db
 
 ```
 
